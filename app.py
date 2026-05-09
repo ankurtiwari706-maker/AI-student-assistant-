@@ -18,7 +18,7 @@ if uploaded_file and api_key:
     if question:
         with st.spinner("Thinking..."):
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel("gemini-2.0-flash-exp")
+            model = genai.GenerativeModel("gemini-pro")
             prompt = f"""You are a helpful study assistant.
 Use ONLY the document content below to answer the question.
 If answer not found say: I could not find this in the document.
