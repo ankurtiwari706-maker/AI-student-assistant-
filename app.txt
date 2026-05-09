@@ -1,32 +1,4 @@
-import streamlit as st
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
-import fitz
-
-st.set_page_config(page_title="AI Study Assistant", page_icon="📚")
-st.title("📚 AI Study Assistant")
-st.caption("Upload any PDF and ask questions instantly")
-
-api_key = st.text_input("Paste your Gemini API Key", type="password")
-uploaded_file = st.file_uploader("Upload your PDF", type=["pdf"])
-
-if uploaded_file and api_key:
-    with st.spinner("Reading your document..."):
-        doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
-        text = "".join([page.get_text() for page in doc])
-        splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        chunks = splitter.create_documents([text])
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001", google_api_key=api_key)
-        vectorstore = FAISS.from_documents(chunks, embeddings)
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
-        qa = RetrievalQA.from_chain_type(llm=llm, retriever=vectorstore.as_retriever())
-    st.success("Document ready! Ask your question below.")
-    question = st.text_input("Type your question:")
-    if question:
-        with st.spinner("Thinking..."):
-            answer = qa.run(question)
-        st.markdown(f"**Answer:** {answer}")
+streamlit
+google-genai
+pymupdf
         
