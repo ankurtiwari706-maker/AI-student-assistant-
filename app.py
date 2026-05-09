@@ -1,5 +1,6 @@
 import streamlit as st
 import fitz
+import google.generativeai as genai
 
 st.set_page_config(page_title="AI Study Assistant", page_icon="📚")
 st.title("📚 AI Study Assistant")
@@ -16,16 +17,13 @@ if uploaded_file and api_key:
     question = st.text_input("Type your question:")
     if question:
         with st.spinner("Thinking..."):
-            import google.generativeai as genai
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel("gemini-2.0-flash-exp")
             prompt = f"""You are a helpful study assistant.
 Use ONLY the document content below to answer the question.
 If answer not found say: I could not find this in the document.
-
 Document:
 {text[:10000]}
-
 Question: {question}"""
             response = model.generate_content(prompt)
         st.markdown(f"**Answer:** {response.text}")
